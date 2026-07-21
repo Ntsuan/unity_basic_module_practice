@@ -15,6 +15,7 @@ public class SimpleEnemy : MonoBehaviour
     [SerializeField] private Material normalMaterial;
     [SerializeField] private Material hitMaterial;
     [SerializeField] private Material selectedMaterial;
+    [SerializeField] private Material visionHighlightedMaterial;
     [SerializeField] private Material attackWarningMaterial;
     [SerializeField] private Transform attackRangeIndicator;
     [SerializeField] private GameObject healthDropPrefab;
@@ -34,6 +35,7 @@ public class SimpleEnemy : MonoBehaviour
     private float attackWindupTimer;
     private float blockedRetryTimer;
     private bool isSelected;
+    private bool isVisionHighlighted;
     private bool isShowingHitFeedback;
     private bool isPreparingAttack;
     private Renderer enemyRenderer;
@@ -48,6 +50,21 @@ public class SimpleEnemy : MonoBehaviour
     public int MaxHealth => maxHealth;
     public bool IsDefeated => currentHealth <= 0;
 
+    public void SetVisionHighlighted(bool highlighted)
+    {
+        if (isVisionHighlighted == highlighted)
+        {
+            return;
+        }
+
+        isVisionHighlighted = highlighted;
+
+        if (!isShowingHitFeedback)
+        {
+            ApplyCurrentMaterial();
+        }
+    }
+
     private void Awake()
     {
         currentHealth = maxHealth;
@@ -60,6 +77,11 @@ public class SimpleEnemy : MonoBehaviour
         if (attackWarningMaterial == null)
         {
             attackWarningMaterial = CreateRuntimeMaterial("Runtime Enemy Attack Warning", new Color(1f, 0.25f, 0.12f));
+        }
+
+        if (visionHighlightedMaterial == null)
+        {
+            visionHighlightedMaterial = CreateRuntimeMaterial("Runtime Enemy Vision Highlight", new Color(0.15f, 1f, 0.82f));
         }
 
         if (attackRangeIndicator == null)
@@ -122,6 +144,7 @@ public class SimpleEnemy : MonoBehaviour
         if (IsDefeated || target == null || playerHealth == null || playerHealth.IsDown)
         {
             CancelAttackWindup();
+            SetVisionHighlighted(false);
             return;
         }
 
@@ -308,7 +331,13 @@ public class SimpleEnemy : MonoBehaviour
             return;
         }
 
-        SetMaterial(isSelected && selectedMaterial != null ? selectedMaterial : normalMaterial);
+        if (isSelected && selectedMaterial != null)
+        {
+            SetMaterial(selectedMaterial);
+            return;
+        }
+
+        SetMaterial(isVisionHighlighted && visionHighlightedMaterial != null ? visionHighlightedMaterial : normalMaterial);
     }
 
     private void BeginAttackWindup()

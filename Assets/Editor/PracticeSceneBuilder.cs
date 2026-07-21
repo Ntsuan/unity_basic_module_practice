@@ -40,6 +40,7 @@ public static class PracticeSceneBuilder
         Material enemyMaterial = CreateMaterial("Practice Enemy Purple", new Color(0.62f, 0.16f, 1f));
         Material enemyHitMaterial = CreateMaterial("Practice Enemy Hit White", new Color(1f, 0.94f, 1f));
         Material enemySelectedMaterial = CreateMaterial("Practice Enemy Selected Yellow", new Color(1f, 0.95f, 0.18f));
+        Material enemyVisionHighlightedMaterial = CreateMaterial("Practice Enemy Vision Highlight", new Color(0.15f, 1f, 0.82f));
         Material enemyAttackWarningMaterial = CreateMaterial("Practice Enemy Attack Warning", new Color(1f, 0.25f, 0.12f));
         Material attackRangeMaterial = CreateTransparentMaterial("Practice Enemy Attack Range", new Color(1f, 0.08f, 0.04f, 0.32f));
         Material enemyRespawnMaterial = CreateTransparentMaterial("Practice Enemy Respawn Warning", new Color(0.72f, 0.28f, 1f, 0.36f));
@@ -96,6 +97,7 @@ public static class PracticeSceneBuilder
         player.AddComponent<PlayerController>();
         player.AddComponent<PlayerAim>();
         player.AddComponent<PlayerPickup>();
+        player.AddComponent<PlayerVision>();
 
         PlayerHealth playerHealth = player.AddComponent<PlayerHealth>();
         SerializedObject serializedHealth = new SerializedObject(playerHealth);
@@ -150,6 +152,7 @@ public static class PracticeSceneBuilder
             enemyMaterial,
             enemyHitMaterial,
             enemySelectedMaterial,
+            enemyVisionHighlightedMaterial,
             enemyAttackWarningMaterial,
             attackRangeMaterial,
             enemyRespawnMaterial,
@@ -273,6 +276,7 @@ public static class PracticeSceneBuilder
         Material normalMaterial,
         Material hitMaterial,
         Material selectedMaterial,
+        Material visionHighlightedMaterial,
         Material attackWarningMaterial,
         Material attackRangeMaterial,
         Material respawnWarningMaterial,
@@ -322,6 +326,7 @@ public static class PracticeSceneBuilder
         serializedEnemy.FindProperty("normalMaterial").objectReferenceValue = normalMaterial;
         serializedEnemy.FindProperty("hitMaterial").objectReferenceValue = hitMaterial;
         serializedEnemy.FindProperty("selectedMaterial").objectReferenceValue = selectedMaterial;
+        serializedEnemy.FindProperty("visionHighlightedMaterial").objectReferenceValue = visionHighlightedMaterial;
         serializedEnemy.FindProperty("attackWarningMaterial").objectReferenceValue = attackWarningMaterial;
         serializedEnemy.FindProperty("attackRangeIndicator").objectReferenceValue = attackRangeIndicator.transform;
         serializedEnemy.FindProperty("respawnIndicator").objectReferenceValue = respawnIndicator.transform;
